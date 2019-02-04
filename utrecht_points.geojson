@@ -1,0 +1,181 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.0793,5.08267 ]
+    },
+    "properties": {
+    "puntnr":1151,
+    "naam":"Dominee Martin Luther Kinglaan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.09745,5.08008 ]
+    },
+    "properties": {
+    "puntnr":1152,
+    "naam":"Vleutenseweg"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.06846,5.11135 ]
+    },
+    "properties": {
+    "puntnr":1153,
+    "naam":"Kanaalweg"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.0929,5.11356 ]
+    },
+    "properties": {
+    "puntnr":1154,
+    "naam":"Vredenburg"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.09576,5.10832 ]
+    },
+    "properties": {
+    "puntnr":1156,
+    "naam":"Amsterdamsestraatweg"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.09281,5.12713 ]
+    },
+    "properties": {
+    "puntnr":1158,
+    "naam":"Lucasbrug"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.07899,5.13291 ]
+    },
+    "properties": {
+    "puntnr":1162,
+    "naam":"Venuslaan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.09605,5.14241 ]
+    },
+    "properties": {
+    "puntnr":1164,
+    "naam":"Biltstraat"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.0864,5.16162 ]
+    },
+    "properties": {
+    "puntnr":1165,
+    "naam":"Archmideslaan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.08414,5.16113 ]
+    },
+    "properties": {
+    "puntnr":1166,
+    "naam":"Weg tot de Wetenschap"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.10695,5.10713 ]
+    },
+    "properties": {
+    "puntnr":1168,
+    "naam":"Jagerskade"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.0867,5.07936 ]
+    },
+    "properties": {
+    "puntnr":1169,
+    "naam":"Dafne Schippersbrug"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.08644,5.12937 ]
+    },
+    "properties": {
+    "puntnr":1160,
+    "naam":"Maliesingel"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.09384,5.10545 ]
+    },
+    "properties": {
+    "puntnr":1161,
+    "naam":"Cremerstraat"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.10295,5.13354 ]
+    },
+    "properties": {
+    "puntnr":1170,
+    "naam":"Kard. De Jongweg"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [  52.09132,5.10748 ]
+    },
+    "properties": {
+    "puntnr":1171,
+    "naam":"Sijpesteintunnel"
+    }
+  }
+]
+}
