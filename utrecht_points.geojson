@@ -9,7 +9,8 @@
     },
     "properties": {
     "puntnr":1151,
-    "naam":"Dominee Martin Luther Kinglaan"
+    "naam":"Dominee Martin Luther Kinglaan",
+    "traffic":2936
     }
   },
   {
@@ -20,7 +21,8 @@
     },
     "properties": {
     "puntnr":1152,
-    "naam":"Vleutenseweg"
+    "naam":"Vleutenseweg",
+    "traffic":6257
     }
   },
   {
@@ -31,7 +33,8 @@
     },
     "properties": {
     "puntnr":1153,
-    "naam":"Kanaalweg"
+    "naam":"Kanaalweg",
+    "traffic":4458
     }
   },
   {
@@ -42,7 +45,8 @@
     },
     "properties": {
     "puntnr":1154,
-    "naam":"Vredenburg"
+    "naam":"Vredenburg",
+    "traffic":28287
     }
   },
   {
@@ -53,7 +57,8 @@
     },
     "properties": {
     "puntnr":1156,
-    "naam":"Amsterdamsestraatweg"
+    "naam":"Amsterdamsestraatweg",
+    "traffic":16418
     }
   },
   {
@@ -64,7 +69,8 @@
     },
     "properties": {
     "puntnr":1158,
-    "naam":"Lucasbrug"
+    "naam":"Lucasbrug",
+    "traffic":15277
     }
   },
   {
@@ -75,7 +81,8 @@
     },
     "properties": {
     "puntnr":1162,
-    "naam":"Venuslaan"
+    "naam":"Venuslaan",
+    "traffic":915
     }
   },
   {
@@ -86,7 +93,8 @@
     },
     "properties": {
     "puntnr":1164,
-    "naam":"Biltstraat"
+    "naam":"Biltstraat",
+    "traffic":14077
     }
   },
   {
@@ -97,7 +105,8 @@
     },
     "properties": {
     "puntnr":1165,
-    "naam":"Archmideslaan"
+    "naam":"Archmideslaan",
+    "traffic":8650
     }
   },
   {
@@ -108,7 +117,8 @@
     },
     "properties": {
     "puntnr":1166,
-    "naam":"Weg tot de Wetenschap"
+    "naam":"Weg tot de Wetenschap",
+    "traffic":11026
     }
   },
   {
@@ -119,7 +129,8 @@
     },
     "properties": {
     "puntnr":1168,
-    "naam":"Jagerskade"
+    "naam":"Jagerskade",
+    "traffic":1531
     }
   },
   {
@@ -130,7 +141,8 @@
     },
     "properties": {
     "puntnr":1169,
-    "naam":"Dafne Schippersbrug"
+    "naam":"Dafne Schippersbrug",
+    "traffic":3946
     }
   },
   {
@@ -141,7 +153,8 @@
     },
     "properties": {
     "puntnr":1160,
-    "naam":"Maliesingel"
+    "naam":"Maliesingel",
+    "traffic":5955
     }
   },
   {
@@ -152,7 +165,8 @@
     },
     "properties": {
     "puntnr":1161,
-    "naam":"Cremerstraat"
+    "naam":"Cremerstraat",
+    "traffic":737
     }
   },
   {
@@ -163,7 +177,8 @@
     },
     "properties": {
     "puntnr":1170,
-    "naam":"Kard. De Jongweg"
+    "naam":"Kard. De Jongweg",
+    "traffic":2205
     }
   },
   {
@@ -174,7 +189,9 @@
     },
     "properties": {
     "puntnr":1171,
-    "naam":"Sijpesteintunnel"
+    "naam":"Sijpesteintunnel",
+    "traffic":0
+
     }
   }
 ]
