@@ -1405,8 +1405,9 @@
                         52.08467,
                         6.7700000000000005
                     ]
-                ],
-                
+                ]
+            },
+            {
             "type": "Feature",
             "properties": {
                 "name": "nieuwegein_centrum_maarssen",
