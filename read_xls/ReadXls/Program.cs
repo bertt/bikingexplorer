@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ReadXls
@@ -50,21 +53,60 @@ namespace ReadXls
             {
                 Excel._Worksheet worksheet = workbook.Sheets[i];
                 var name = worksheet.Name;
-                Console.WriteLine(name);
                 Excel.Range range = worksheet.UsedRange;
 
                 var latlon = GetLatLon(workbook, i - 1);
+                Console.WriteLine($"{name}: {latlon}");
+
+                float forward;
+                float backward;
+
+                if(i == 14)
+                {
+                    forward = 90;
+                    backward = 270;
+                }
+                else
+                {
+                    var directions = GetSharedStreetsDirections(latlon).Result;
+                    forward = directions.forward;
+                    backward = directions.backward;
+                }
+
 
                 // richting1
                 var tp = "tp" + (i - 1).ToString();
                 var richting1 = GetCvs(range, number, 73, 96);
                 var richting2 = GetCvs(range, number, 183, 207);
 
-                var tpresult = $"{tp}, {latlon}, r1({richting1}), r2({richting2})";
+                var tpresult = $"{tp}, {latlon}, r1, {forward}, ({richting1}), r2, {backward},({richting2})";
                 result.Add(tpresult);
             }
             return result;
         }
+
+
+        public static async Task<(float forward, float backward)> GetSharedStreetsDirections(string latlon)
+        {
+            var key = "bdd23fa1-7ac5-4158-b354-22ec946bb575";
+            // sample input: 52.079037, 5.081251
+            var ll= latlon.Split(',');
+            var url = $"https://api.sharedstreets.io/v0.1.0/match/point/{ll[1]},{ll[0]}?auth={key}&searchRadius=50&maxCandidates=5";
+
+            var client = new HttpClient();
+
+            var response = await client.GetAsync(url);
+
+            var json = response.Content.ReadAsStringAsync().Result;
+
+            var rootobject = JsonConvert.DeserializeObject<Rootobject>(json);
+
+            var forward = (rootobject.features[0].properties.bearing);
+            var backward = rootobject.features[1].properties.bearing;
+            var t = (forward, backward);
+            return t;
+        }
+
 
         private static string GetLatLon(Excel.Workbook workbook, int telpunt)
         {
