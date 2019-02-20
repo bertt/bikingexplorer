@@ -45,7 +45,7 @@ map.addLayer({
 
     map.addSource("meetpunten", {
             "type": "geojson",
-            "data": "./utrecht_points.geojson"
+            "data": "utrecht_points.geojson"
     });
     
     map.addLayer({

@@ -19,7 +19,7 @@ namespace ReadXls
             var number = ExcelColumnNameToNumber("CY");
 
             var telpuntdata  = GetTelpuntData(workbook, number);
-            WriteToCsv(telpuntdata);
+            WriteToCsv(telpuntdata, "180314");
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -29,13 +29,11 @@ namespace ReadXls
             Marshal.ReleaseComObject(workbook);
             xlApp.Quit();
             Marshal.ReleaseComObject(xlApp);
-
-
         }
 
-        private static void WriteToCsv(List<string> data)
+        private static void WriteToCsv(List<string> data, string day)
         {
-            using (var w = new StreamWriter("data.csv"))
+            using (var w = new StreamWriter($"{day}_data.csv"))
             {
                 foreach (var line in data)
                 {
@@ -44,7 +42,6 @@ namespace ReadXls
                 }
             }
         }
-
 
         private static List<string> GetTelpuntData(Excel.Workbook workbook, int number)
         {
