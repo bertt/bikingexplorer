@@ -22,7 +22,7 @@ namespace ReadXls
             var number = ExcelColumnNameToNumber("CY");
 
             var telpuntdata  = GetTelpuntData(workbook, number);
-            WriteToCsv(telpuntdata, "180314");
+            WriteToCsv(telpuntdata, new DateTime(2018,3,14));
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -37,13 +37,22 @@ namespace ReadXls
             Console.ReadKey();
         }
 
-        private static void WriteToCsv(List<Telpunt> data, string day)
+        private static void WriteToCsv(List<Telpunt> telpunten, DateTime day)
         {
-            using (var w = new StreamWriter($"{day}_data.csv"))
+            using (var w = new StreamWriter($"{day.ToString("yyyy-MM-dd")}_data.csv"))
             {
-                foreach (var line in data)
+                foreach (var telpunt in telpunten)
                 {
-                    w.WriteLine(line);
+                    var now = day;
+                    for(int h = 0; h < 24; h++)
+                    {
+                        var iso8601 = now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        var richting1 = $"{telpunt.Id}, {telpunt.LatLon}, {iso8601}, {telpunt.Richting1Dir}, {telpunt.Richting1Measurements[h]}";
+                        var richting2 = $"{telpunt.Id}, {telpunt.LatLon}, {iso8601}, {telpunt.Richting2Dir}, {telpunt.Richting2Measurements[h]}";
+                        w.WriteLine(richting1);
+                        w.WriteLine(richting2);
+                        now= now.AddHours(1);
+                    }
                     w.Flush();
                 }
             }
@@ -81,8 +90,8 @@ namespace ReadXls
                 telpunt.CheckDirections();
 
                 var tp = "tp" + (i - 1).ToString();
-                telpunt.Richting1Values = GetCvs(range, number, 73, 96);
-                telpunt.Richting2Values = GetCvs(range, number, 183, 207);
+                telpunt.Richting1Measurements = GetMeasurements(range, number, 73, 96);
+                telpunt.Richting2Measurements = GetMeasurements(range, number, 183, 207);
 
                 result.Add(telpunt);
             }
@@ -147,7 +156,7 @@ namespace ReadXls
             return richting.Split(' ')[1];
         }
 
-        private static string GetCvs(Excel.Range range, int columnnumber, int from, int to)
+        private static List<int> GetMeasurements(Excel.Range range, int columnnumber, int from, int to)
         {
             var numbers = new List<int>();
             for (var j = from; j <= to; j++)
@@ -155,7 +164,7 @@ namespace ReadXls
                 var val = (int)range.Cells[j, columnnumber].Value;
                 numbers.Add(val);
             }
-            return string.Join(", ", numbers);
+            return numbers;
         }
 
         public static int ExcelColumnNameToNumber(string columnName)

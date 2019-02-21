@@ -1,4 +1,6 @@
-﻿namespace ReadXls
+﻿using System.Collections.Generic;
+
+namespace ReadXls
 {
     public class Telpunt
     {
@@ -11,8 +13,8 @@
         public float Backward { get; set; }
         public float Richting1Dir { get; set; }
         public float Richting2Dir { get; set; }
-        public string Richting1Values { get; set; }
-        public string Richting2Values { get; set; }
+        public List<int> Richting1Measurements { get; set; }
+        public List<int> Richting2Measurements { get; set; }
 
         public void CheckDirections()
         {
@@ -24,12 +26,6 @@
                 Richting1Dir = Backward;
                 Richting2Dir = Forward;
             }
-        }
-
-        public override string ToString()
-        {
-            var result = $"{Id}, {Name}, {LatLon}, r1, {Richting1Dir}, ({Richting1Values}), r2, {Richting2Dir},({Richting2Values})";
-            return result;
         }
     }
 }
