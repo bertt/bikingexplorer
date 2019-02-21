@@ -41,12 +41,13 @@ namespace ReadXls
         {
             using (var w = new StreamWriter($"{day.ToString("yyyy-MM-dd")}_data.csv"))
             {
+                w.WriteLine($"id,latitude,longitude,time,direction,measurement");
                 foreach (var telpunt in telpunten)
                 {
                     var now = day;
                     for(int h = 0; h < 24; h++)
                     {
-                        var iso8601 = now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        var iso8601 = now.ToString("yyyy-MM-ddTHH:mm:ss");
                         var richting1 = $"{telpunt.Id}, {telpunt.LatLon}, {iso8601}, {telpunt.Richting1Dir}, {telpunt.Richting1Measurements[h]}";
                         var richting2 = $"{telpunt.Id}, {telpunt.LatLon}, {iso8601}, {telpunt.Richting2Dir}, {telpunt.Richting2Measurements[h]}";
                         w.WriteLine(richting1);
