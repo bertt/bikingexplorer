@@ -32,9 +32,12 @@ namespace ReadXls
             Marshal.ReleaseComObject(workbook);
             xlApp.Quit();
             Marshal.ReleaseComObject(xlApp);
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
 
-        private static void WriteToCsv(List<string> data, string day)
+        private static void WriteToCsv(List<Telpunt> data, string day)
         {
             using (var w = new StreamWriter($"{day}_data.csv"))
             {
@@ -46,47 +49,48 @@ namespace ReadXls
             }
         }
 
-        private static List<string> GetTelpuntData(Excel.Workbook workbook, int number)
+        private static List<Telpunt> GetTelpuntData(Excel.Workbook workbook, int number)
         {
-            var result = new List<String>();
+            var result = new List<Telpunt>();
             for (var i = 2; i <= 16; i++)
             {
                 Excel._Worksheet worksheet = workbook.Sheets[i];
                 var name = worksheet.Name;
                 Excel.Range range = worksheet.UsedRange;
 
-                var latlon = GetLatLon(workbook, i - 1);
-                Console.WriteLine($"{name}: {latlon}");
+                var telpunt = GetTelpunt(workbook, i - 1);
+                Console.WriteLine($"{name}: {telpunt.LatLon}");
 
                 float forward;
                 float backward;
 
                 if(i == 14)
                 {
-                    forward = 90;
-                    backward = 270;
+                    forward = 270;
+                    backward = 90;
                 }
                 else
                 {
-                    var directions = GetSharedStreetsDirections(latlon).Result;
+                    var directions = GetSharedStreetsDirections(telpunt.Id, telpunt.LatLon).Result;
                     forward = directions.forward;
                     backward = directions.backward;
                 }
+                telpunt.Forward = forward;
+                telpunt.Backward = backward;
 
+                telpunt.CheckDirections();
 
-                // richting1
                 var tp = "tp" + (i - 1).ToString();
-                var richting1 = GetCvs(range, number, 73, 96);
-                var richting2 = GetCvs(range, number, 183, 207);
+                telpunt.Richting1Values = GetCvs(range, number, 73, 96);
+                telpunt.Richting2Values = GetCvs(range, number, 183, 207);
 
-                var tpresult = $"{tp}, {latlon}, r1, {forward}, ({richting1}), r2, {backward},({richting2})";
-                result.Add(tpresult);
+                result.Add(telpunt);
             }
             return result;
         }
 
 
-        public static async Task<(float forward, float backward)> GetSharedStreetsDirections(string latlon)
+        public static async Task<(float forward, float backward)> GetSharedStreetsDirections(int telpuntid, string latlon)
         {
             var key = "bdd23fa1-7ac5-4158-b354-22ec946bb575";
             // sample input: 52.079037, 5.081251
@@ -103,20 +107,44 @@ namespace ReadXls
 
             var forward = (rootobject.features[0].properties.bearing);
             var backward = rootobject.features[1].properties.bearing;
+
+            // something different in berenkuil....
+            if (telpuntid == 9)
+            {
+                backward = rootobject.features[3].properties.bearing;
+            }
+
             var t = (forward, backward);
             return t;
         }
 
 
-        private static string GetLatLon(Excel.Workbook workbook, int telpunt)
+        private static Telpunt GetTelpunt(Excel.Workbook workbook, int telpuntid)
         {
             Excel._Worksheet worksheet = workbook.Sheets[19];
             Excel.Range range = worksheet.UsedRange;
 
-            var column = ExcelColumnNameToNumber("Q");
-            var row = telpunt+1;
-            var val = (string)range.Cells[row, column].Value;
-            return val;
+            var columnA = ExcelColumnNameToNumber("A");
+            var columnB = ExcelColumnNameToNumber("B");
+            var columnQ = ExcelColumnNameToNumber("Q");
+            var columnF = ExcelColumnNameToNumber("F");
+            var columnG = ExcelColumnNameToNumber("G");
+
+            var row = telpuntid+1;
+            var val = (string)range.Cells[row, columnQ].Value;
+
+            var richting1 = (string)range.Cells[row, columnF].Value;
+            var richting2 = (string)range.Cells[row, columnG].Value;
+            var name = (string)range.Cells[row, columnB].Value;
+            var id = (int)range.Cells[row, columnA].Value;
+
+            var telpunt = new Telpunt { Id = id, Name = name,  LatLon = val, Richting1 = GetDirection(richting1), Richting2 = GetDirection(richting2) };
+            return telpunt;
+        }
+
+        private static string GetDirection(string richting)
+        {
+            return richting.Split(' ')[1];
         }
 
         private static string GetCvs(Excel.Range range, int columnnumber, int from, int to)
