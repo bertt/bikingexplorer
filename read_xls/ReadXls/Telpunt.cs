@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ReadXls
 {
@@ -6,6 +7,7 @@ namespace ReadXls
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public DateTime DateTime { get; set; }
         public string LatLon { get; set; }
         public string Richting1 { get; set; }
         public string Richting2 { get; set; }
@@ -15,6 +17,11 @@ namespace ReadXls
         public float Richting2Dir { get; set; }
         public List<int> Richting1Measurements { get; set; }
         public List<int> Richting2Measurements { get; set; }
+
+        public string DateTimeString()
+        {
+            return DateTime.ToString("yyyy-MM-ddTHH:mm:ss");
+        }
 
         public void CheckDirections()
         {

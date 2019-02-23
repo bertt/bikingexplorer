@@ -19,10 +19,11 @@ namespace ReadXls
             var xlApp = new Excel.Application();
             var workbook = xlApp.Workbooks.Open(xls);
 
-            var number = ExcelColumnNameToNumber("CY");
+            var from_day = new DateTime(2018, 3, 15);
+            var to_day = new DateTime(2018, 3, 15);
 
-            var telpuntdata  = GetTelpuntData(workbook, number);
-            WriteToCsv(telpuntdata, new DateTime(2018,3,14));
+            var telpuntdata = GetTelpuntData(workbook, from_day, to_day);
+            WriteToCsv(telpuntdata, "tp.csv");
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -37,44 +38,64 @@ namespace ReadXls
             Console.ReadKey();
         }
 
-        private static void WriteToCsv(List<Telpunt> telpunten, DateTime day)
+        private static void WriteToCsv(List<Telpunt> telpunten, string file)
         {
-            using (var w = new StreamWriter($"{day.ToString("yyyy-MM-dd")}_data.csv"))
+            using (var w = new StreamWriter(file))
             {
                 w.WriteLine($"id,latitude,longitude,time,direction,measurement");
                 foreach (var telpunt in telpunten)
                 {
-                    var now = day;
-                    for(int h = 0; h < 24; h++)
+                    for (int h = 0; h < 24; h++)
                     {
-                        var iso8601 = now.ToString("yyyy-MM-ddTHH:mm:ss");
-                        var richting1 = $"{telpunt.Id}, {telpunt.LatLon}, {iso8601}, {telpunt.Richting1Dir}, {telpunt.Richting1Measurements[h]}";
-                        var richting2 = $"{telpunt.Id}, {telpunt.LatLon}, {iso8601}, {telpunt.Richting2Dir}, {telpunt.Richting2Measurements[h]}";
+                        var day = telpunt.DateTime;
+                        day=day.AddHours(h);
+                        var day_String = day.ToString("yyyy-MM-ddTHH:mm:ss");
+                        var richting1 = $"{telpunt.Id}, {telpunt.LatLon}, {day_String}, {telpunt.Richting1Dir}, {telpunt.Richting1Measurements[h]}";
+                        var richting2 = $"{telpunt.Id}, {telpunt.LatLon}, {day_String}, {telpunt.Richting2Dir}, {telpunt.Richting2Measurements[h]}";
                         w.WriteLine(richting1);
                         w.WriteLine(richting2);
-                        now= now.AddHours(1);
                     }
                     w.Flush();
                 }
             }
         }
 
-        private static List<Telpunt> GetTelpuntData(Excel.Workbook workbook, int number)
+        private static List<Telpunt> GetTelpuntData(Excel.Workbook workbook, DateTime from_day, DateTime to_day)
         {
+            var days = (to_day - from_day).Days;
+            var result = new List<Telpunt>();
+
+            for (var i = 0; i <= days; i++)
+            {
+                var day = from_day.AddDays(i);
+                var tp_day = GetTelpuntDataDay(workbook, day);
+                result.AddRange(tp_day);
+            }
+            return result;
+        }
+
+        private static List<Telpunt> GetTelpuntDataDay(Excel.Workbook workbook, DateTime day)
+        {
+            var first_day_column_name = "AE";
+            var first_day_column = ExcelColumnNameToNumber(first_day_column_name);
+            var first_day = new DateTime(2018, 1, 1);
+
+            var days = (day - first_day).Days;
+            var number = first_day_column + days;
+
             var result = new List<Telpunt>();
             for (var i = 2; i <= 16; i++)
             {
                 Excel._Worksheet worksheet = workbook.Sheets[i];
-                var name = worksheet.Name;
                 Excel.Range range = worksheet.UsedRange;
 
                 var telpunt = GetTelpunt(workbook, i - 1);
-                Console.WriteLine($"{name}: {telpunt.LatLon}");
+                Console.WriteLine($"{day.ToString("yyyy-MM-dd")}: {telpunt.Name}");
 
                 float forward;
                 float backward;
 
-                if(i == 14)
+                if (i == 14)
                 {
                     forward = 270;
                     backward = 90;
@@ -87,10 +108,10 @@ namespace ReadXls
                 }
                 telpunt.Forward = forward;
                 telpunt.Backward = backward;
+                telpunt.DateTime = day;
 
                 telpunt.CheckDirections();
 
-                var tp = "tp" + (i - 1).ToString();
                 telpunt.Richting1Measurements = GetMeasurements(range, number, 73, 96);
                 telpunt.Richting2Measurements = GetMeasurements(range, number, 183, 207);
 
@@ -99,12 +120,11 @@ namespace ReadXls
             return result;
         }
 
-
         public static async Task<(float forward, float backward)> GetSharedStreetsDirections(int telpuntid, string latlon)
         {
             var key = "bdd23fa1-7ac5-4158-b354-22ec946bb575";
             // sample input: 52.079037, 5.081251
-            var ll= latlon.Split(',');
+            var ll = latlon.Split(',');
             var url = $"https://api.sharedstreets.io/v0.1.0/match/point/{ll[1]},{ll[0]}?auth={key}&searchRadius=50&maxCandidates=5";
 
             var client = new HttpClient();
@@ -140,7 +160,7 @@ namespace ReadXls
             var columnF = ExcelColumnNameToNumber("F");
             var columnG = ExcelColumnNameToNumber("G");
 
-            var row = telpuntid+1;
+            var row = telpuntid + 1;
             var val = (string)range.Cells[row, columnQ].Value;
 
             var richting1 = (string)range.Cells[row, columnF].Value;
@@ -148,7 +168,7 @@ namespace ReadXls
             var name = (string)range.Cells[row, columnB].Value;
             var id = (int)range.Cells[row, columnA].Value;
 
-            var telpunt = new Telpunt { Id = id, Name = name,  LatLon = val, Richting1 = GetDirection(richting1), Richting2 = GetDirection(richting2) };
+            var telpunt = new Telpunt { Id = id, Name = name, LatLon = val, Richting1 = GetDirection(richting1), Richting2 = GetDirection(richting2) };
             return telpunt;
         }
 
